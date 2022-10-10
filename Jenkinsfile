@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILDNUMBER}")
+                        app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
                 }
@@ -35,14 +35,14 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariables: "USERPASS")]) {
                     script {
-                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker pull tuannanhh/train-schedule:${env.BUILDNUMBER}\""
+                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker pull tuannanhh/train-schedule:${env.BUILD_NUMBER}\""
                         try {
                             sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker stop train-schedule\""
                             sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker rm train-schedule\""
                         } catch (err) {
                             echo "caucht error: $err"
                         }
-                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker run --restart always train-schedule -p 8080:8080 -d tuannanhh/train-schedule:${env.BUILDNUMBER}\""
+                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker run --restart always train-schedule -p 8080:8080 -d tuannanhh/train-schedule:${env.BUILD_NUMBER}\""
                     }
                 }
             }
