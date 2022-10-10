@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Build docker images'){
+        stage('Build docker images') {
             steps {
                 script {
                     app = docker.build("tuannanhh/train-schedule")
@@ -32,7 +32,7 @@ pipeline {
         }
 
         stage('Deploy Docker To Development') {
-            step {
+            steps {
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariables: "USERPASS")]) {
                     script {
                         sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker pull tuannanhh/train-schedule:${env.BUILDNUMBER}\""
