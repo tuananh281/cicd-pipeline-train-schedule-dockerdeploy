@@ -35,13 +35,14 @@ pipeline {
             step {
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariables: "USERPASS")]) {
                     script {
-                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \ " docker pull tuannanhh/train-schedule:${env.BUILDNUMBER}\" "
+                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker pull tuannanhh/train-schedule:${env.BUILDNUMBER}\""
                         try {
-                            sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \ " docker stop train-schedule""
+                            sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker stop train-schedule\""
+                            sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker rm train-schedule\""
                         } catch (err) {
                             echo "caucht error: $err"
                         }
-                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \ " docker run --restart always train-schedule -p 8080:8080 -d tuannanhh/train-schedule:${env.BUILDNUMBER}\" "
+                        sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@dev_ip \"docker run --restart always train-schedule -p 8080:8080 -d tuannanhh/train-schedule:${env.BUILDNUMBER}\""
                     }
                 }
             }
