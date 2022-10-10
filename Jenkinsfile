@@ -33,7 +33,7 @@ pipeline {
 
         stage('Deploy Docker To Development') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariables: "USERPASS")]) {
+                withCredentials([usernamePassword(credentialsId: 'webserver-deploy', usernameVariable: 'USERNAME', passwordVariables: "USERPASS")]) {
                     script {
                         sh "sshpass -p '$USERNAME' ssh -o 'StrictHostKeyChecking=no' $USERNAME@$dev_ip \"docker pull tuannanhh/train-schedule:${env.BUILD_NUMBER}\""
                         try {
