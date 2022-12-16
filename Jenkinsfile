@@ -36,6 +36,13 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                sh 'npm test'
+            }
+        }
+
         stage('Deploying App to Kubernetes') {
             steps {
                 input 'Do you want to deploy to K8S Cluster ?'
