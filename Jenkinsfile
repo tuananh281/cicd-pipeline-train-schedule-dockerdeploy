@@ -36,6 +36,14 @@ pipeline {
             }
         }
 
+        stage('Deploying App to Kubernetes') {
+            steps {
+                script {
+                    kubernetesDeploy(configs: 'deployment.yml', kubeconfigId: 'k8s_tuananh')
+                }
+            }
+        }
+
 //         stage('Deploy Docker To Development') {
 //             steps {
 //                 withCredentials([usernamePassword(credentialsId: 'webserver-deploy', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
