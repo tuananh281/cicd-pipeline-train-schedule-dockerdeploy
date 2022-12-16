@@ -1,13 +1,13 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
-            steps {
-                echo 'Running build automation'
-                sh './gradlew build --no-daemon'
-                archiveArtifacts artifacts: 'dist/trainSchedule.zip'
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         echo 'Running build automation'
+        //         sh './gradlew build --no-daemon'
+        //         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
+        //     }
+        // }
         stage('Checkout Source') {
             steps {
                  git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
