@@ -8,6 +8,11 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
+        stage('Checkout Source') {
+            steps {
+                 git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
+            }
+        }
 
         stage('Build docker images') {
             steps {
