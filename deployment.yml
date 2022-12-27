@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nodeapp-dplta
+  namespace: deploy-k8s
   labels:
     app: nodeapp
 spec:
@@ -24,6 +25,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nodeapp-svc
+  namespace: deploy-k8s
 spec:
   selector:
     app: nodeapp
