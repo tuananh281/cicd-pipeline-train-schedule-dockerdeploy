@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: train-schedule
-          image: tuannanhh/train-schedule:41
+          image: tuannanhh/train-schedule:latest
           ports:
             - containerPort: 8080
 ---
