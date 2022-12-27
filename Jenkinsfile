@@ -43,15 +43,15 @@ pipeline {
         //     }
         // }
 
-        stage('Deploying App to Kubernetes') {
-            steps {
-                // input 'Do you want to deploy to K8S Cluster ?'
-                // milestone(1)
-                script {
-                    kubernetesDeploy(configs: 'deploy/deployment.yml', kubeconfigId: 'k8s_tuananh')
-                }
-            }
-        }
+//         stage('Deploying App to Kubernetes') {
+//             steps {
+//                 // input 'Do you want to deploy to K8S Cluster ?'
+//                 // milestone(1)
+//                 script {
+//                     kubernetesDeploy(configs: 'deploy/deployment.yml', kubeconfigId: 'k8s_tuananh')
+//                 }
+//             }
+//         }
 
 //         stage('Deploy Docker To Development') {
 //             steps {
