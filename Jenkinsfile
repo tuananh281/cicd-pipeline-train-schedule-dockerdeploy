@@ -30,7 +30,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
                         app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+//                         app.push("latest")
                     }
                 }
             }
