@@ -45,11 +45,10 @@ pipeline {
 
         stage('Deploying App to Kubernetes') {
             steps {
-                input 'Do you want to deploy to K8S Cluster ?'
-                milestone(1)
+                // input 'Do you want to deploy to K8S Cluster ?'
+                // milestone(1)
                 script {
-                    sh 'kubectl delete -f deployment.yml'
-                    kubernetesDeploy(configs: 'deployment.yml', kubeconfigId: 'k8s_tuananh', deleteResource : true)
+                    kubernetesDeploy(configs: 'deployment.yml', kubeconfigId: 'k8s_tuananh')
                 }
             }
         }
