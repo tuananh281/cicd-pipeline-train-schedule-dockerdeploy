@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodeapp-dplta
+  name: tuananh-dep
   namespace: deploy-k8s
   labels:
     app: nodeapp
@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodeapp-svc
+  name: tuananh-svc
   namespace: deploy-k8s
 spec:
   selector:
