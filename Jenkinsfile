@@ -48,7 +48,7 @@ pipeline {
                 // input 'Do you want to deploy to K8S Cluster ?'
                 // milestone(1)
                 script {
-                    kubernetesDeploy(configs: 'deployment.yml', kubeconfigId: 'k8s_tuananh')
+                    kubernetesDeploy(configs: 'deploy/deployment.yml', kubeconfigId: 'k8s_tuananh')
                 }
             }
         }
