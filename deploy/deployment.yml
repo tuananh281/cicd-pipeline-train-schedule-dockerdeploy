@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tuananh-dep
-  namespace: argocd
+  namespace: deploy-argocd
   labels:
     app: nodeapp
 spec:
@@ -25,7 +25,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tuananh-svc
-  namespace: argocd
+  namespace: deploy-argocd
 spec:
   selector:
     app: nodeapp
