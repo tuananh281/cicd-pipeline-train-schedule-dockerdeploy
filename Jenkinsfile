@@ -29,26 +29,26 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
-//                         app.push("${env.BUILD_NUMBER}")
+                        app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
                 }
             }
         }
         
-        stage('Deploy k8s') {
-            steps{
-                 withCredentials([string(credentialsId: "argocd_role", variable: 'ARGOCD_AUTH_TOKEN')]) {
-                     sh '''
-                     ARGOCD_SERVER="argocd-deploy.com"
-                     APP_NAME=tuananh-dep-k8s
+//         stage('Deploy k8s') {
+//             steps{
+//                  withCredentials([string(credentialsId: "argocd_role", variable: 'ARGOCD_AUTH_TOKEN')]) {
+//                      sh '''
+//                      ARGOCD_SERVER="argocd-deploy.com"
+//                      APP_NAME=tuananh-dep-k8s
                      
-                     ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app sync $APP_NAME --force
-                     ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app wait $APP_NAME --timeout 600
-                     '''
-                }
-            }
-        }    
+//                      ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app sync $APP_NAME --force
+//                      ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app wait $APP_NAME --timeout 600
+//                      '''
+//                 }
+//             }
+//         }    
         
         // stage('Test') {
         //     steps {
