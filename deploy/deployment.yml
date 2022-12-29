@@ -18,6 +18,7 @@ spec:
       containers:
         - name: train-schedule
           image: tuannanhh/train-schedule:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 ---
@@ -29,7 +30,7 @@ metadata:
 spec:
   selector:
     app: nodeapp
-  type: LoadBalancer
+  type: NodePort
   ports:
     - protocol: TCP
       port: 8080
