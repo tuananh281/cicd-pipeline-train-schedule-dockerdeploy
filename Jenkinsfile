@@ -36,12 +36,14 @@ pipeline {
             }
         }
 
-        stage('Trigger ManifestUpdate')
+        stage('Trigger ManifestUpdate') {
             steps{
                 echo "trigger update manifestjob"
                 build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
             }
+        }
     } 
+}
 //         stage('Deploy k8s') {
 //             steps{
 //                  withCredentials([string(credentialsId: "argocd_role", variable: 'ARGOCD_AUTH_TOKEN')]) {
@@ -125,5 +127,3 @@ pipeline {
 //                 }
 //             }
 //         }
-    }
-}
