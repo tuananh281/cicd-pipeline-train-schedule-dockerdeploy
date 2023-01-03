@@ -37,11 +37,29 @@ pipeline {
         }
 
         stage('Trigger ManifestUpdate') {
-            steps{
+            steps {
                 echo "trigger update manifestjob"
                 build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
             }
         }
+
+        stage('Update git') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCEESS', stageResult: 'FAILUE'){
+                        withCredentials([usernamePassword(credentialsId: 'tuananh_github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]){
+                            sh "cat deploy/deployment.yaml"
+                            sh "sed -i s+tuannanhh/train-schedule:*+tuannanhh/train-schedule:${DOCKERTAG}+G" deploy/deployment.yaml
+                            sh "cat deploy/deployment.yaml"
+                            sh "git add ."
+                            sh "git commit -m 'Done get changemanifest: ${env.BUILD_NUMBER}'"
+                            sh "git push https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git HEAD:main"
+                        }
+                    }
+                }
+            }
+        }
+
     } 
 }
 //         stage('Deploy k8s') {
