@@ -39,9 +39,9 @@ pipeline {
         stage('Trigger ManifestUpdate') {
             steps {
                 echo "trigger update manifestjob"
-                build job: 'addtag', 
+                build job: 'updatemanifest', 
                     parameters: [
-                        string(name: 'DOCKERTAG', value: String.valueOf(BUILD_NUMBER))
+                        string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)
                     ]   
             }
         }
