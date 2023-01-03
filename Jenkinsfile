@@ -49,7 +49,7 @@ pipeline {
                     catchError(buildResult: 'SUCCEESS', stageResult: 'FAILUE'){
                         withCredentials([usernamePassword(credentialsId: 'tuananh_github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]){
                             sh "cat deploy/deployment.yaml"
-                            sh "sed -i s+tuannanhh/train-schedule:*+tuannanhh/train-schedule:${DOCKERTAG}+G" deploy/deployment.yaml
+                            sh "sed -i s+tuannanhh/train-schedule:*+tuannanhh/train-schedule:${DOCKERTAG}+g" deploy/deployment.yaml
                             sh "cat deploy/deployment.yaml"
                             sh "git add ."
                             sh "git commit -m 'Done get changemanifest: ${env.BUILD_NUMBER}'"
