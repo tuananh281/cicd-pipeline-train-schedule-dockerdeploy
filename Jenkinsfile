@@ -17,7 +17,7 @@ pipeline {
         stage('Build docker images') {
             steps {
                 script {
-                    app = docker.build("tuannanhh/train-schedule")
+                    app = docker.build("tuannanhh/test-gitops")
                     app.inside {
                         sh 'echo $(curl localhost:8080)'
                     }
