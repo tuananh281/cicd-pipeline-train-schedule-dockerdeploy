@@ -37,7 +37,7 @@ pipeline {
                         app.push("latest")
                     }
 
-                    sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+                    sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}.*"
                 }
             }
         }
