@@ -17,7 +17,8 @@ pipeline {
         stage('Build docker images') {
             steps {
                 script {
-                    app = docker.build("tuannanhh/test-gitops")
+                    DOCKER_IMAGE="test-gitops"
+                    app = docker.build("tuannanhh/${DOCKER_IMAGE}")
                     app.inside {
                         sh 'echo $(curl localhost:8080)'
                     }
@@ -32,6 +33,8 @@ pipeline {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
+                    
+                    sh "docker image rm ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
                 }
             }
         }
