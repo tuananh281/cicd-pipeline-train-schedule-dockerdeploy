@@ -34,7 +34,7 @@ pipeline {
 
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
                         app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+                        // app.push("latest")
                     }
 
                     sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
