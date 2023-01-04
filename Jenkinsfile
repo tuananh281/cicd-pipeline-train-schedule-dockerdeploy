@@ -29,12 +29,15 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    DOCKER_REGISTRY="registry.hub.docker.com"
+                    DOCKER_NAME="tuannanhh"
+
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
-                    
-                    sh "docker image rm ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+
+                    sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
                 }
             }
         }
