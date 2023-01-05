@@ -19,9 +19,9 @@ pipeline {
                 script {
                     DOCKER_IMAGE="test-gitops"
                     app = docker.build("tuannanhh/${DOCKER_IMAGE}")
-                    app.inside {
-                        sh 'echo $(curl localhost:8080)'
-                    }
+                    // app.inside {
+                    //     sh 'echo $(curl localhost:8080)'
+                    // }
                 }
             }
         }
