@@ -29,15 +29,15 @@ pipeline {
     skipDefaultCheckout(true)
   }
   stages {
-    stage('Clone code SCM for sonar') {
-      steps {
-        // Clean before build
-        cleanWs()
-        git branch: 'main',
-          credentialsId: 'tuananh_github',
-          url: 'git@github.com:tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
-      }
-    }
+    // stage('Clone code SCM for sonar') {
+    //   steps {
+    //     // Clean before build
+    //     cleanWs()
+    //     git branch: 'main',
+    //       credentialsId: 'tuananh_github',
+    //       url: 'git@github.com:tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
+    //   }
+    // }
     stage('SonarQube analysis') {
       steps {
         script {
