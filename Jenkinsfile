@@ -9,7 +9,7 @@ pipeline {
     skipDefaultCheckout(true)
   }
   stages {
-    stage('Clone SCM for sonar') {
+    stage('Clone code SCM for sonar') {
       steps {
         // Clean before build
         cleanWs()
