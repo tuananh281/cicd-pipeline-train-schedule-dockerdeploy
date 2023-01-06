@@ -1,65 +1,66 @@
-pipeline {
-    agent any
-    stages{
-        stage('Cloning the project from Git') {
-            git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy'
-        }
-        stage('Sonarqube Analysis') {
-            def scannerHome = tool 'sonarqube';
-            withSonarQubeEnv('sonarqube'){
-                sh "${scannerHome}/bin/sonar-scanner \
-                -D sonar.login=admin \
-                -D sonar.password=admin \
-                -D sonar.projectKey=test \
-                -D sonar.exclusion=vendor/**,resources/**,**/*.java \
-                -D sonar.host.url=http://34.131.105.107:9000/"
-            }
-        }
-    }
-}
-// properties([disableConcurrentBuilds()])
 // pipeline {
-//   agent any
-//   tools {
-//     nodejs 'test_nodejs'
-//   }
-//   options {
-//     // This is required if you want to clean before build
-//     skipDefaultCheckout(true)
-//   }
-//   stages {
-//     stage('Clone code SCM for sonar') {
-//       steps {
-//         // Clean before build
-//         cleanWs()
-//         git branch: 'main',
-//           credentialsId: 'tuananh_github',
-//           url: 'git@github.com:tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
-//       }
-//     }
-//     stage('SonarQube analysis') {
-//       steps {
-//         script {
-//           def scannerHome = tool 'sonarscan';
-//           withSonarQubeEnv('sonarqube') {
-//             sh "${tool("sonarscan ")}/bin/sonar-scanner -Dsonar.projectKey=reactapp -Dsonar.projectName=reactapp"
-//           }
+//     agent any
+//     stages{
+//         stage('Cloning the project from Git') {
+//             git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy'
 //         }
-//       }
-//     }
-//     stage("Quality gate") {
-//       steps {
-//         script {
-//           def qualitygate = waitForQualityGate()
-//           sleep(10)
-//           if (qualitygate.status != "OK") {
-//             waitForQualityGate abortPipeline: true
-//           }
+//         stage('Sonarqube Analysis') {
+//             def scannerHome = tool 'sonarqube';
+//             withSonarQubeEnv('sonarqube'){
+//                 sh "${scannerHome}/bin/sonar-scanner \
+//                 -D sonar.login=admin \
+//                 -D sonar.password=admin \
+//                 -D sonar.projectKey=test \
+//                 -D sonar.exclusion=vendor/**,resources/**,**/*.java \
+//                 -D sonar.host.url=http://34.131.105.107:9000/"
+//             }
 //         }
-//       }
 //     }
-//   }
 // }
+
+properties([disableConcurrentBuilds()])
+pipeline {
+  agent any
+  tools {
+    nodejs 'test_nodejs'
+  }
+  options {
+    // This is required if you want to clean before build
+    skipDefaultCheckout(true)
+  }
+  stages {
+    stage('Clone code SCM for sonar') {
+      steps {
+        // Clean before build
+        cleanWs()
+        git branch: 'main',
+          credentialsId: 'tuananh_github',
+          url: 'git@github.com:tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
+      }
+    }
+    stage('SonarQube analysis') {
+      steps {
+        script {
+          def scannerHome = tool 'sonarscan';
+          withSonarQubeEnv('sonarqube') {
+            sh "${tool("sonarscan ")}/bin/sonar-scanner -Dsonar.projectKey=reactapp -Dsonar.projectName=reactapp"
+          }
+        }
+      }
+    }
+    stage("Quality gate") {
+      steps {
+        script {
+          def qualitygate = waitForQualityGate()
+          sleep(10)
+          if (qualitygate.status != "OK") {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
+    }
+  }
+}
 
 
 // pipeline {
