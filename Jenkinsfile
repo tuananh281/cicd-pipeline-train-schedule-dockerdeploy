@@ -14,7 +14,7 @@ pipeline {
         // Clean before build
         cleanWs()
         git branch: 'main',
-          credentialsId: 'credentials',
+          credentialsId: 'tuananh_github',
           url: 'git@github.com:tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
       }
     }
