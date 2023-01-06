@@ -1,7 +1,7 @@
 properties([disableConcurrentBuilds()])
 pipeline {
   agent {
-    label 'main'
+    label 'master'
   }
   tools {
     nodejs 'test_nodejs'
