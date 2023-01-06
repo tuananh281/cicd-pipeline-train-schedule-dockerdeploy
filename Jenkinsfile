@@ -1,59 +1,110 @@
+properties([disableConcurrentBuilds()])
 pipeline {
-    agent any
-    stages {
-        // stage('Build') {
-        //     steps {
-        //         echo 'Running build automation'
-        //         sh './gradlew build --no-daemon'
-        //         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
-        //     }
-        // }
-        // stage('Checkout Source') {
-        //     steps {
-        //          git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
-        //     }
-        // }
-
-        stage('Build docker images') {
-            steps {
-                script {
-                    DOCKER_IMAGE="test-gitops"
-                    app = docker.build("tuannanhh/${DOCKER_IMAGE}")
-                    // app.inside {
-                    //     sh 'echo $(curl localhost:8080)'
-                    // }
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    DOCKER_REGISTRY="registry.hub.docker.com"
-                    DOCKER_NAME="tuannanhh"
-
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
-                        app.push("${env.BUILD_NUMBER}")
-                        // app.push("latest")
-                    }
-                    sh "docker image rm ${DOCKER_NAME}/${DOCKER_IMAGE}:latest"
-                    sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
-                }
-            }
-        }
-
-        stage('Trigger ManifestUpdate') {
-            steps {
-                echo "Update manifestjob"
-                build job: 'update-manifest-github', 
-                    parameters: [
-                        string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)
-                    ]   
-            }
-        }
-    
+  agent {
+    label 'main'
+  }
+  tools {
+    nodejs 'test_nodejs'
+  }
+  options {
+    // This is required if you want to clean before build
+    skipDefaultCheckout(true)
+  }
+  stages {
+    stage('Clone SCM for sonar') {
+      steps {
+        // Clean before build
+        cleanWs()
+        git branch: 'main',
+          credentialsId: 'credentials',
+          url: 'git@github.com:tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
+      }
     }
+    stage('SonarQube analysis') {
+      steps {
+        script {
+          def scannerHome = tool 'sonarscan';
+          withSonarQubeEnv('sonarqube') {
+            sh "${tool("sonarscan ")}/bin/sonar-scanner -Dsonar.projectKey=reactapp -Dsonar.projectName=reactapp"
+          }
+        }
+      }
+    }
+    stage("Quality gate") {
+      steps {
+        script {
+          def qualitygate = waitForQualityGate()
+          sleep(10)
+          if (qualitygate.status != "OK") {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
+    }
+  }
 }
+
+
+// pipeline {
+//     agent any
+//     stages {
+//         // stage('Build') {
+//         //     steps {
+//         //         echo 'Running build automation'
+//         //         sh './gradlew build --no-daemon'
+//         //         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
+//         //     }
+//         // }
+//         // stage('Checkout Source') {
+//         //     steps {
+//         //          git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
+//         //     }
+//         // }
+
+//         stage('Build docker images') {
+//             steps {
+//                 script {
+//                     DOCKER_IMAGE="test-gitops"
+//                     app = docker.build("tuannanhh/${DOCKER_IMAGE}")
+//                     // app.inside {
+//                     //     sh 'echo $(curl localhost:8080)'
+//                     // }
+//                 }
+//             }
+//         }
+
+//         stage('Push Docker Image') {
+//             steps {
+//                 script {
+//                     DOCKER_REGISTRY="registry.hub.docker.com"
+//                     DOCKER_NAME="tuannanhh"
+
+//                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
+//                         app.push("${env.BUILD_NUMBER}")
+//                         // app.push("latest")
+//                     }
+//                     sh "docker image rm ${DOCKER_NAME}/${DOCKER_IMAGE}:latest"
+//                     sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+//                 }
+//             }
+//         }
+
+//         stage('Trigger ManifestUpdate') {
+//             steps {
+//                 echo "Update manifestjob"
+//                 build job: 'update-manifest-github', 
+//                     parameters: [
+//                         string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)
+//                     ]   
+//             }
+//         }
+    
+//     }
+// }
+
+
+
+
 //         stage('Deploy k8s') {
 //             steps{
 //                  withCredentials([string(credentialsId: "argocd_role", variable: 'ARGOCD_AUTH_TOKEN')]) {
