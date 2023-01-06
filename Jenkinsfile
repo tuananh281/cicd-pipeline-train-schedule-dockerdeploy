@@ -78,7 +78,7 @@ pipeline {
         //          git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
         //     }
         // }
-        tools {nodejs “node”}
+        tools {nodejs “test_nodejs”}
         stage('Test code') {
             steps {
                 sh "npm config ls"
