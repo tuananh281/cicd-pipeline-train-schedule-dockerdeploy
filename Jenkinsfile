@@ -1,27 +1,27 @@
-pipeline {
-    agent any
-    stages{
+node 
+{
         // stage('Cloning the project from Git') {
         //     checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git_repo', url: 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git']])
         // }
-        stage('Sonarqube Analysis') {
-            def scannerHome = tool 'sonarqube';
-                withSonarQubeEnv('sonarqube_token'){
-                sh """/var/lib/jenkins/tools/hudson.plugins.sonar.SornarRunnerInstallation/sonarqube/bin/sonar-scanner \
-                -D sonar.projectVersion=1.0-SNAPSHOT \
-                    -D sonar.login=admin \
-                    -D sonar.password=28112002 \
-                    -D sonar.projectBaseDir=/var/lib/jenkins/workspace/train-schedule/ \
-                    -D sonar.projectKey=cicd-pipeline-train-schedule-dockerdeploy \
-                    -D sonar.language=js \
-                    -D sonar.sourceEncoding=UTF-8 \
-                    -D sonar.sources=cicd-pipeline-train-schedule-dockerdeploy/src/main \
-                    -D sonar.tests=cicd-pipeline-train-schedule-dockerdeploy/src/test \
-                    -D sonar.host.url=http://172.16.94.15:9000/"""
-                }
-        }
+    stage('Sonarqube Analysis') {
+        def scannerHome = tool 'sonarqube';
+            withSonarQubeEnv('sonarqube_token') {
+            sh """/var/lib/jenkins/tools/hudson.plugins.sonar.SornarRunnerInstallation/sonarqube/bin/sonar-scanner \
+            -D sonar.projectVersion=1.0-SNAPSHOT \
+                -D sonar.login=admin \
+                -D sonar.password=28112002 \
+                -D sonar.projectBaseDir=/var/lib/jenkins/workspace/train-schedule/ \
+                -D sonar.projectKey=cicd-pipeline-train-schedule-dockerdeploy \
+                -D sonar.language=js \
+                -D sonar.sourceEncoding=UTF-8 \
+                -D sonar.sources=cicd-pipeline-train-schedule-dockerdeploy/src/main \
+                -D sonar.tests=cicd-pipeline-train-schedule-dockerdeploy/src/test \
+                -D sonar.host.url=http://172.16.94.15:9000/"""
+            }
     }
+    
 }
+
 
 // properties([disableConcurrentBuilds()])
 // pipeline {
