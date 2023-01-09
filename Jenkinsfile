@@ -10,7 +10,7 @@ node
             -D sonar.projectVersion=1.0-SNAPSHOT \
                 -D sonar.login=admin \
                 -D sonar.password=28112002 \
-                -D sonar.projectBaseDir=/var/lib/jenkins/workspace/train-schedule/ \
+                -D sonar.projectBaseDir=/var/jenkins_home/workspace/train-schedule/ \
                 -D sonar.projectKey=test \
                 -D sonar.language=js \
                 -D sonar.sourceEncoding=UTF-8 \
