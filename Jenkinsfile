@@ -11,7 +11,7 @@ node
                 -D sonar.login=admin \
                 -D sonar.password=28112002 \
                 -D sonar.projectBaseDir=/var/jenkins_home/workspace/train-schedule/ \
-
+                -D sonar.projectKey=. \
                 -D sonar.language=js \
                 -D sonar.sourceEncoding=UTF-8 \
 
@@ -20,7 +20,7 @@ node
     }
 
 }
-//                -D sonar.projectKey=. \                 -D sonar.sources=. \
+//               -D sonar.sources=. \
 //                -D sonar.tests=./test \
 
 // properties([disableConcurrentBuilds()])
