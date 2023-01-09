@@ -13,6 +13,7 @@ pipeline {
         // }
         stage('SonarQube analysis 2') {
             steps {
+                echo 'hello world'
                 sh 'gradle sonarqube'
             }
         }
