@@ -11,15 +11,15 @@ node
                 -D sonar.login=admin \
                 -D sonar.password=28112002 \
                 -D sonar.projectBaseDir=/var/lib/jenkins/workspace/train-schedule/ \
-                -D sonar.projectKey=cicd-pipeline-train-schedule-dockerdeploy \
+                -D sonar.projectKey=test \
                 -D sonar.language=js \
                 -D sonar.sourceEncoding=UTF-8 \
-                -D sonar.sources=cicd-pipeline-train-schedule-dockerdeploy/src/main \
-                -D sonar.tests=cicd-pipeline-train-schedule-dockerdeploy/src/test \
+                -D sonar.sources=test/src/main \
+                -D sonar.tests=test/src/test \
                 -D sonar.host.url=http://172.16.94.15:9000/"""
             }
     }
-    
+
 }
 
 
