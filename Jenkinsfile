@@ -6,7 +6,7 @@ node
     stage('Sonarqube Analysis') {
         def scannerHome = tool 'sonarqube';
             withSonarQubeEnv('sonarqube_token') {
-            sh """/var/lib/jenkins//tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube_Scanner/bin/sonar-scanner \
+            sh """ ${JENKINS_HOME}/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube_Scanner/bin/sonar-scanner \
             -D sonar.projectVersion=1.0-SNAPSHOT \
                 -D sonar.login=admin \
                 -D sonar.password=28112002 \
