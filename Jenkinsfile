@@ -2,9 +2,7 @@ pipeline {
     agent any
     stages{
         stage('Cloning the project from Git') {
-            git branch: 'main', 
-            credentialsId: 'git_repo',
-            url: 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy'
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git_repo', url: 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git']])
         }
         stage('Sonarqube Analysis') {
             def scannerHome = tool 'sonarqube';
