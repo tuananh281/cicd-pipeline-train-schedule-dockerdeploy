@@ -1,54 +1,26 @@
-pipeline {
-    agent any
-    stages {
-        // stage('SonarQube analysis 1') {
-        //     steps {
-        //         sh 'mvn clean package sonar:sonar'
-        //     }
-        // }
-        // stage("Quality Gate 1") {
-        //     steps {
-        //         waitForQualityGate abortPipeline: true
-        //     }
-        // }
-        stage('SonarQube analysis 2') {
-            steps {
-                echo 'hello world'
-                sh 'gradle sonarqube'
-            }
+node 
+{
+        stage('Cloning the project from Git') {
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git_repo', url: 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git']])
         }
-        stage("Quality Gate 2") {
-            steps {
-                waitForQualityGate abortPipeline: true
+    stage('Sonarqube Analysis') {
+        def scannerHome = tool 'sonarqube';
+            withSonarQubeEnv('sonarqube_token') {
+            sh """ /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
+            -D sonar.projectVersion=1.0-SNAPSHOT \
+                -D sonar.login=admin \
+                -D sonar.password=28112002 \
+                -D sonar.projectBaseDir=/var/jenkins_home/workspace/train-schedule/ \
+                -D sonar.projectKey=test \
+                -D sonar.sources=./test \
+
+                -D sonar.language=js \
+                -D sonar.sourceEncoding=UTF-8 \
+
+                -D sonar.host.url=http://172.16.94.15:9000/"""
             }
-        }
     }
 }
-
-
-// node 
-// {
-//         stage('Cloning the project from Git') {
-//             checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git_repo', url: 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git']])
-//         }
-//     stage('Sonarqube Analysis') {
-//         def scannerHome = tool 'sonarqube';
-//             withSonarQubeEnv('sonarqube_token') {
-//             sh """ /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
-//             -D sonar.projectVersion=1.0-SNAPSHOT \
-//                 -D sonar.login=admin \
-//                 -D sonar.password=28112002 \
-//                 -D sonar.projectBaseDir=/var/jenkins_home/workspace/train-schedule/ \
-//                 -D sonar.projectKey=test \
-//                 -D sonar.sources=./test \
-
-//                 -D sonar.language=js \
-//                 -D sonar.sourceEncoding=UTF-8 \
-
-//                 -D sonar.host.url=http://172.16.94.15:9000/"""
-//             }
-//     }
-
 // }
 //               -D sonar.sources=. \
 //                -D sonar.tests=./test \
