@@ -1,22 +1,29 @@
-// pipeline {
-//     agent any
-//     stages{
-//         stage('Cloning the project from Git') {
-//             git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy'
-//         }
-//         stage('Sonarqube Analysis') {
-//             def scannerHome = tool 'sonarqube';
-//             withSonarQubeEnv('sonarqube'){
-//                 sh "${scannerHome}/bin/sonar-scanner \
-//                 -D sonar.login=admin \
-//                 -D sonar.password=admin \
-//                 -D sonar.projectKey=test \
-//                 -D sonar.exclusion=vendor/**,resources/**,**/*.java \
-//                 -D sonar.host.url=http://34.131.105.107:9000/"
-//             }
-//         }
-//     }
-// }
+pipeline {
+    agent any
+    stages{
+        stage('Cloning the project from Git') {
+            git branch: 'main', 
+            credentialsId: 'git_repo',
+            url: 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy'
+        }
+        stage('Sonarqube Analysis') {
+            def scannerHome = tool 'sonarqube';
+                withSonarQubeEnv('sonarqube_token'){
+                sh """/var/lib/jenkins/tools/hudson.plugins.sonar.SornarRunnerInstallation/sonarqube/bin/sonar-scanner \
+                -D sonar.projectVersion=1.0-SNAPSHOT \
+                    -D sonar.login=admin \
+                    -D sonar.password=28112002 \
+                    -D sonar.projectBaseDir=/var/lib/jenkins/workspace/train-schedule/ \
+                    -D sonar.projectKey=cicd-pipeline-train-schedule-dockerdeploy \
+                    -D sonar.language=js \
+                    -D sonar.sourceEncoding=UTF-8 \
+                    -D sonar.sources=cicd-pipeline-train-schedule-dockerdeploy/src/main \
+                    -D sonar.tests=cicd-pipeline-train-schedule-dockerdeploy/src/test \
+                    -D sonar.host.url=http://172.16.94.15:9000/"""
+                }
+        }
+    }
+}
 
 // properties([disableConcurrentBuilds()])
 // pipeline {
@@ -63,68 +70,68 @@
 // }
 
 
-pipeline {
-    agent any
-    stages {
-        // stage('Build') {
-        //     steps {
-        //         echo 'Running build automation'
-        //         sh './gradlew build --no-daemon'
-        //         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
-        //     }
-        // }
-        // stage('Checkout Source') {
-        //     steps {
-        //          git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
-        //     }
-        // }
-        tools {nodejs “test_nodejs”}
-        stage('Test code') {
-            steps {
-                sh "npm config ls"
-            }
-        }
+// pipeline {
+//     agent any
+//     stages {
+//         // stage('Build') {
+//         //     steps {
+//         //         echo 'Running build automation'
+//         //         sh './gradlew build --no-daemon'
+//         //         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
+//         //     }
+//         // }
+//         // stage('Checkout Source') {
+//         //     steps {
+//         //          git 'https://github.com/tuananh281/cicd-pipeline-train-schedule-dockerdeploy.git'
+//         //     }
+//         // }
+//         tools {nodejs “test_nodejs”}
+//         stage('Test code') {
+//             steps {
+//                 sh "npm config ls"
+//             }
+//         }
 
-        stage('Build docker images') {
-            steps {
-                script {
-                    DOCKER_IMAGE="test-gitops"
-                    app = docker.build("tuannanhh/${DOCKER_IMAGE}")
-                    // app.inside {
-                    //     sh 'echo $(curl localhost:8080)'
-                    // }
-                }
-            }
-        }
+//         stage('Build docker images') {
+//             steps {
+//                 script {
+//                     DOCKER_IMAGE="test-gitops"
+//                     app = docker.build("tuannanhh/${DOCKER_IMAGE}")
+//                     // app.inside {
+//                     //     sh 'echo $(curl localhost:8080)'
+//                     // }
+//                 }
+//             }
+//         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    DOCKER_REGISTRY="registry.hub.docker.com"
-                    DOCKER_NAME="tuannanhh"
+//         stage('Push Docker Image') {
+//             steps {
+//                 script {
+//                     DOCKER_REGISTRY="registry.hub.docker.com"
+//                     DOCKER_NAME="tuannanhh"
 
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
-                        app.push("${env.BUILD_NUMBER}")
-                        // app.push("latest")
-                    }
-                    sh "docker image rm ${DOCKER_NAME}/${DOCKER_IMAGE}:latest"
-                    sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
-                }
-            }
-        }
+//                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_tuananh') {
+//                         app.push("${env.BUILD_NUMBER}")
+//                         // app.push("latest")
+//                     }
+//                     sh "docker image rm ${DOCKER_NAME}/${DOCKER_IMAGE}:latest"
+//                     sh "docker image rm ${DOCKER_REGISTRY}/${DOCKER_NAME}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+//                 }
+//             }
+//         }
 
-        stage('Trigger ManifestUpdate') {
-            steps {
-                echo "Update manifestjob"
-                build job: 'update-manifest-github', 
-                    parameters: [
-                        string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)
-                    ]   
-            }
-        }
+//         stage('Trigger ManifestUpdate') {
+//             steps {
+//                 echo "Update manifestjob"
+//                 build job: 'update-manifest-github', 
+//                     parameters: [
+//                         string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)
+//                     ]   
+//             }
+//         }
     
-    }
-}
+//     }
+// }
 
 
 
