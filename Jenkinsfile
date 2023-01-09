@@ -11,7 +11,7 @@ node
                 -D sonar.login=admin \
                 -D sonar.password=28112002 \
                 -D sonar.projectBaseDir=/var/jenkins_home/workspace/train-schedule/ \
-                -D sonar.projectKey=./test \
+                -D sonar.projectKey=test \
                 -D sonar.sources=./test \
 
                 -D sonar.language=js \
